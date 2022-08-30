@@ -108,7 +108,7 @@ export default {
               this.nickname = "未命名";
             }
             if (data.avatar != null) {
-              this.avatar = this.remoteUrl + data.avatar;
+              this.avatar = this.remoteUrl + "/distributed-blog-data/"  + data.avatar;
             }
             if (data.description != null) {
               this.description = data.description;

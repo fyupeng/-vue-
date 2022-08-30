@@ -186,6 +186,9 @@ export default {
         type: "post",
         url: "/blogApi/user/uploadFace",
         data: formData,
+	beforeSend: function (XMLHttpRequest) {
+          XMLHttpRequest.setRequestHeader("token", localStorage.getItem("token"));
+        },
         cache: false,
         processData: false,
         contentType: false,
@@ -272,7 +275,8 @@ export default {
               this.nickname = data.nickname;
             }
             if (data.avatar != null) {
-              this.avatar = this.remoteUrl + data.avatar;
+              this.avatar = this.remoteUrl + "/distributed-blog-data/" + data.avatar;
+	      console.log(this.avatar);
             }
             if (data.description != null) {
               this.description = data.description;
