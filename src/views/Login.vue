@@ -123,6 +123,7 @@
 <script>
 import "../assets/less/login.less";
 import { validForm } from "../assets/validForm.js";
+
 export default {
   data() {
     return {
@@ -164,18 +165,18 @@ export default {
       }
       this.$toast.loading({
         message: "正在登录中...",
-        duration: 1000,
+        duration: 10000,
         forbidClick: true,
       });
 
       if(this.radio == 1) {
         this.axios({
-        method: "post",
-        url: this.remoteUrl + "/user/login",
-        data: {
-          username: this.userInfo.username,
-          password: this.userInfo.password,
-        },
+          method: "post",
+          url: "/blogApi/user/login",
+          data: {
+            username: this.userInfo.username,
+            password: this.userInfo.password,
+          },
       })
         .then((res) => {
           if (res.data.status == 200) {
@@ -183,6 +184,7 @@ export default {
             this.$toast.success("欢迎登录");
             localStorage.setItem("token", res.data.data.userToken);
             localStorage.setItem("userId", res.data.data.id);
+            localStorage.setItem("timestamp", new Date().getTime());
             /**
              * 实现带参，可以巧妙利用 其他页 把 路由名称通过参数传过来
              */
@@ -191,16 +193,34 @@ export default {
 
             let routeName = query.name;
 
-            if (routeName == undefined) {
-              this.$router.push("home").catch(() => true);
-            }
 
-            if (param != undefined) {
-              this.$router.push({ name: routeName, params: { param } }).catch(() => true);;
+            // 没有转发
+            if (routeName == undefined) {
+
+              this.$router.push({ name: "home" }, (onComplete) => {
+              },(onAbort) => {
+                this.$router.push({ name: "home" }).catch(() => true);
+              });
+
             }
-            this.$router.push({ name: routeName }).catch(() => true);;
-            // 这种 gp -1 没法 传参
-            // this.$router.go(-1,);
+            
+            // 触发登录转发带参数
+            if (param != undefined) {
+
+              this.$router.push({ name: routeName, params: { param } }, (onComplete) => {
+              },(onAbort) => {
+                this.$router.push({ name: routeName, params: { param } }).catch(() => true);
+              });
+              
+            }
+            
+            // 触发登录转发不带参数
+            this.$router.push({ name: routeName }, (onComplete) => {
+            },(onAbort) => {
+              this.$router.push({ name: routeName }).catch(() => true);
+            });
+
+
           } else {
             this.$toast(res.data.msg);
           }
@@ -210,21 +230,20 @@ export default {
         });
       } else {
         this.axios({
-        method: "post",
-        url: this.remoteUrl + "/admin/login",
-        data: {
-          username: this.userInfo.username,
-          password: this.userInfo.password,
-        },
-      })
+          method: "post",
+          url: "/blogApi/admin/login",
+          data: {
+            username: this.userInfo.username,
+            password: this.userInfo.password,
+          },
+        })
         .then((res) => {
-          console.log('aaaa')
-          console.log(res)
           if (res.data.status == 200) {
             this.$toast.clear();
             this.$toast.success("尊贵的管理员");
             localStorage.setItem("token", res.data.data.userToken);
             localStorage.setItem("userId", res.data.data.id);
+            localStorage.setItem("timestamp", new Date().getTime());
             /**
              * 实现带参，可以巧妙利用 其他页 把 路由名称通过参数传过来
              */
@@ -234,16 +253,34 @@ export default {
             let routeName = query.name;
 
 
+            
+            // 没有转发
             if (routeName == undefined) {
-              this.$router.push("home").catch(() => true);
+
+              this.$router.push({ name: "home" }, (onComplete) => {
+              },(onAbort) => {
+                this.$router.push({ name: "home" }).catch(() => true);
+              });
+
             }
 
+            // 触发登录转发带参数
             if (param != undefined) {
-              this.$router.push({ name: routeName, params: { param } }).catch(() => true);;
+
+              this.$router.push({ name: routeName, params: { param } }, (onComplete) => {
+              },(onAbort) => {
+                this.$router.push({ name: routeName, params: { param } }).catch(() => true);
+              });
+
             }
-            this.$router.push({ name: routeName }).catch(() => true);;
-            // 这种 gp -1 没法 传参
-            // this.$router.go(-1,);
+
+            // 触发登录转发不带参数
+            this.$router.push({ name: routeName }, (onComplete) => {
+              },(onAbort) => {
+                this.$router.push({ name: routeName }).catch(() => true);
+              });
+
+
           } else {
             this.$toast(res.data.msg);
           }
@@ -283,7 +320,7 @@ export default {
       });
       this.axios({
         method: "post",
-        url: "user/regist",
+        url: "/blogApi/user/regist",
         data: {
           username: this.registerInfo.username,
           password: this.registerInfo.password,

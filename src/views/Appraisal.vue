@@ -172,7 +172,7 @@ export default {
       }
       this.$toast.loading({
         message: "正在获取....",
-        duration: 30000,
+        duration: 30000
       });
       var content = files.content;
       this.fmg = content.replace(/^data:image\/\w+;base64,/, "");

@@ -77,7 +77,8 @@ Vue.prototype.$video = Video
 
 
 //设置Vue原型属性
-Vue.prototype.remoteUrl = 'http://localhost:9001';
+Vue.prototype.remoteUrl = 'http://localhost:8081';
+Vue.prototype.remoteDataDir = '/distributed-blog-data/';
 //axios拦截器，在发起请求之前执行
 
 // axios.interceptors.request.use(config => {

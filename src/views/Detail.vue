@@ -13,7 +13,7 @@
 
       <div class="other">
         <div class="img-intro">
-          <img v-show="!isShow" :src="this.remoteUrl + article.avatar" alt="" />
+          <img v-show="!isShow" :src="this.remoteUrl + this.remoteDataDir + article.avatar" alt="" />
           <img v-show="isShow" src="../assets/icon/default-avatar.png" alt="" />
           <div class="name">{{article.nickName}}</div>
         </div>
@@ -214,7 +214,7 @@ export default {
         headers: {
           "Content-Type": "application/json",
         },
-        url: "/user/query",
+        url: "user/query",
         params: {
           userId: localStorage.getItem("userId"),
          },
@@ -223,7 +223,7 @@ export default {
           if (res.status == 200) {
             let data = res.data;
             if(data.avatar != null) {
-              this.myAvatar = this.remoteUrl + res.data.avatar;
+              this.myAvatar = this.remoteUrl + this.remoteDataDir + res.data.avatar;
             }
           } else {
             this.$toast(res.msg);
@@ -270,7 +270,7 @@ export default {
         headers: {
           "Content-Type": "application/json",
         },
-        url: "/user/comment/saveComment",
+        url: "user/comment/saveComment",
         data: {
           articleId: this.articleId,
           comment: this.commentContent,
@@ -333,12 +333,12 @@ export default {
                 }
                 this.rules.push(rule);
               } else {
-                o.fromUserAvatar = this.remoteUrl + o.fromUserAvatar;
+                o.fromUserAvatar = this.remoteUrl + this.remoteDataDir + o.fromUserAvatar;
                 this.rules.push(rule);
               }
             });
           } else {
-            this.$toast.fail(res.data.msg);
+
           }
 
           // console.log(this.commentList);
@@ -395,7 +395,7 @@ export default {
     if(username == "youkeUser" && localStorage.getItem("token") == null) {
       this.axios({
         method: "post",
-        url: "user/login",
+        url: "/blogApi/user/login",
         data: {
           username: username,
           password: username,
@@ -408,14 +408,12 @@ export default {
             localStorage.setItem("userId", res.data.data.id);
             }
         })
+    } else {
+      this.getMyInfo();
     }
-
-    
-    
-
     this.getArticleDetail(articleId);
     this.getAllComments(articleId, this.commentSize, 2);
-    this.getMyInfo();
+   
   },
 };
 </script>

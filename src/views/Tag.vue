@@ -98,8 +98,8 @@ import { request } from "../util/request";
 export default {
   data() {
     return {
-      tagList: "",
-      noneTagList:"",
+      tagList: [],
+      noneTagList:[],
       showSaveWindow: false,
       showRemoveWindow: false,
       showTrash: false,
@@ -125,7 +125,7 @@ export default {
         }
       }).then(res=>{
         if(res.status == 200) {
-          this.noneTagList = res.data;
+          this.noneTagList = res.data || [];
         }
       })
     },
@@ -235,8 +235,8 @@ export default {
         },
       })
         .then((res) => {
-          this.tagList = res.data;
-          this.tagNum = res.data.length;
+          this.tagList = res.data || [];
+          // this.tagNum = this.tagList != null ? this.tagList.length : 1;
         })
     },
   },

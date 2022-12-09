@@ -345,7 +345,7 @@ export default {
                 }
                 this.rules.push(rule);
               } else {
-                o.fromUserAvatar = this.remoteUrl + o.fromUserAvatar;
+                o.fromUserAvatar = this.remoteUrl + this.remoteDataDir + o.fromUserAvatar;
                 this.rules.push(rule);
               }
             });

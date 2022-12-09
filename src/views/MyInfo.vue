@@ -275,7 +275,7 @@ export default {
               this.nickname = data.nickname;
             }
             if (data.avatar != null) {
-              this.avatar = this.remoteUrl + "/distributed-blog-data/" + data.avatar;
+              this.avatar = this.remoteUrl + this.remoteDataDir + data.avatar;
 	      console.log(this.avatar);
             }
             if (data.description != null) {

@@ -205,7 +205,6 @@ export default {
         })
       }
       if (action == "cancel") {
-        console.log("取消");
         setTimeout(done, 100);
         // 取消
       }
