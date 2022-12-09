@@ -14,7 +14,7 @@ module.exports = defineConfig({
       },
       proxy: {
         '/blogApi': {
-        target: 'http://120.76.217.185:8081', //访问地址
+        target: 'http://localhost:8081', //访问地址
         changeOrigin: true,
         // secure: false, //只有代理https 地址需要次选项
         pathRewrite: {
