@@ -101,29 +101,6 @@ export default {
     }
   },
   methods: {
-    // divideList(list, col, callback) {
-    //     var array = [];
-    //     var par1List = [];
-    //     var par2List = [];
-    //     var row = Math.floor(list.length / col);
-    //     var remainder = row == 0 ? 0 : list.length % col;
-    //   if (remainder == 0) {
-    //     array[0] = list;
-    //     array[1] = [];
-    //     callback(array);
-    //     return;
-    //   }
-    //   for (var i = 0; i < col * row; i++) {
-    //     par1List.push(list[i]);
-    //   }
-    //   for (var i = col * row; i < col * row + remainder; i++) {
-    //     par2List.push(list[i]); 
-    //   }
-    //   array[0] = par1List;
-    //   array[1] = par2List;
-    //   callback(array)
-    //   return;
-    // },
     goback() {
       this.$router.push("my");
     },
@@ -273,6 +250,13 @@ export default {
     },
   },
   created() {
+    let userToken = localStorage.getItem("token");
+    let userId = localStorage.getItem("userId");
+    if (userToken == null || userId == null) {
+      this.$toast.fail("请登录");
+      this.$router.push({ name: "login", query: { name: "myPicture" } });
+      return;
+    }
      this.getPictureList();
   }
 };
