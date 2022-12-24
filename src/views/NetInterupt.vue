@@ -12,7 +12,7 @@
 
 <script>
 import "../assets/less/netInterupt.less";
-import { request } from "../util/request";
+import { request } from "../util/js/request";
 export default {
   data() {
     return {

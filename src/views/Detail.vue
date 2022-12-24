@@ -169,7 +169,7 @@
 
 <script>
 import "../assets/less/detail.less";
-import { request } from "../util/request";
+import { request } from "../util/js/request";
 
 export default {
   data() {
@@ -252,7 +252,8 @@ export default {
     },
     publish() {
       let userToken = localStorage.getItem("token");
-      if (userToken == null) {
+      let userId = localStorage.getItem("userId");
+      if (userToken == null || userId == null) {
         this.$toast.fail("请登录");
         this.$router.push({
           name: "login",

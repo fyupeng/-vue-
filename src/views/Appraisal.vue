@@ -75,7 +75,7 @@
 // import { Base64 } from 'js-base64';
 import $ from "jquery";
 import "../assets/less/appraisal.less";
-import { request } from "../util/request";
+import { request } from "../util/js/request";
 const Base64 = require("js-base64").Base64;
 export default {
   data() {
@@ -165,36 +165,70 @@ export default {
     },
     upload(files) {
       let userToken = localStorage.getItem("token");
-      if (userToken == null) {
+      let userId = localStorage.getItem("userId");
+      if (userToken == null || userId == null) {
         this.$toast.fail("请登录");
         this.$router.push({ name: "login", query: { name: "home" } });
         return;
       }
       this.$toast.loading({
         message: "正在获取....",
-        duration: 30000
+        duration: 1000,
+        forbidClick: false
       });
       var content = files.content;
       this.fmg = content.replace(/^data:image\/\w+;base64,/, "");
 
-      const baidu_server = "/baiduApi/oauth/2.0/token?";
-      const grant_type = "client_credentials";
-      const client_id = "4wCZa9Vp3GUztFjG3VtYsjEY"; // 应用的API Key
-      const client_secret = "iSMYjUURnZM0eyn4w6SSinXMV5Y0PrU7"; // 应用的Secret Key
 
-      const url =
-        baidu_server +
-        "grant_type=" +
-        grant_type +
-        "&client_id=" +
-        client_id +
-        "&client_secret=" +
-        client_secret;
       this.loading = true;
 
-      this.axios
-        .get(url)
-        .then((res) => {
+      // const bodyFormdata = new FormData();
+
+      // var pictureBOs = [
+      //                       {
+      //                           "pictureDesc": "图片描述1",
+      //                           "pictureWidth": "100",
+      //                           "pictureHeight": "120"
+      //                       },
+      //                       {
+      //                           "pictureDesc": "图片描述2",
+      //                           "pictureWidth": "100",
+      //                           "pictureHeight": "120"
+      //                       }
+      //                  ]
+
+      // bodyFormdata.append("file", files.file);
+      // bodyFormdata.append("file", files.file);
+      // bodyFormdata.append("userId", '221028ATNA3G1T7C');
+
+      // console.log(bodyFormdata)
+
+      // bodyFormdata.append("pictureBOs", JSON.stringify(pictureBOs));
+      // request({
+      //   method: "post",
+      //   url:
+      //     "user/picture/upload",
+      //   data: bodyFormdata,
+      //   headers: {
+      //     "Content-Type": "multipart/form-data",
+      //   },
+      // })
+      //   .then((res) => {
+      //     if (res.status == 200) {
+      //       this.$toast.clear();
+      //       this.$toast.success("处理成功");
+      //       this.useDefault = false;
+      //       this.result = res.data.result;
+      //     }
+      //   })
+      //   .catch((err) => {
+      //     console.log(err);
+      //   });
+
+      request({
+        method: "get",
+        url: "user/plantIdentification",
+      }).then((res) => {
           console.log(res)
           // 获取access_token
           if (res.status === 200) {
@@ -210,15 +244,14 @@ export default {
             // 地址识别接口
             const bodyFormdata = new FormData();
             bodyFormdata.append("image", this.fmg);
-            bodyFormdata.append("baike_num", 3);
-            this.axios({
+            bodyFormdata.append("num", 3);
+            request({
               method: "post",
               url:
-                "/baiduApi/rest/2.0/image-classify/v1/plant?access_token=" +
-                res.data.access_token,
+                "user/plantIdentification",
               data: bodyFormdata,
               headers: {
-                "Content-Type": "application/x-www-form-urlencoded",
+                "Content-Type": "content-type=multipart/form-data",
               },
             })
               .then((res) => {
@@ -226,7 +259,10 @@ export default {
                   this.$toast.clear();
                   this.$toast.success("处理成功");
                   this.useDefault = false;
-                  this.result = res.data.result;
+                  console.log(JSON.parse(res.data));
+                  this.result = JSON.parse(res.data).result;
+                  console.log(this.result)
+
                 }
               })
               .catch((err) => {

@@ -41,7 +41,6 @@
         </div>
 
         <div class="type">
-          <div class="type-intro">文章分类:</div>
           <div class="type-content">
             <van-field
               readonly
@@ -49,20 +48,52 @@
               label="分类"
               :value="chooseClassName"
               placeholder="选择分类"
-              @click="showPicker = true"
+              @click="showClassPicker = true"
               style="margin-left: 10px; width: 90%"
             />
-            <van-popup v-model="showPicker" round position="bottom">
+            <van-field
+              readonly
+              clickable
+              label="封面"
+              :value="choosePictureName"
+              placeholder="选择图片"
+              @click="showCoverPicker = true"
+              style="margin-left: 10px; width: 90%"
+            />
+            <van-popup v-model="showClassPicker" round position="bottom">
               <van-picker
                 title="文章分类"
                 show-toolbar
                 :columns="classNameList"
-                @cancel="showPicker = false"
+                @cancel="showClassPicker = false"
                 @confirm="changeConfirm"
               />
             </van-popup>
+
+            <van-popup closeable close-icon="close" v-model="showCoverPicker" round position="bottom">
+              <div class="picture-box">
+                  <div  class="picture-item item-border item-flex" v-for="(item, index) in pictureList">
+                  
+                      <div @click="curSelect(index)" class="item" :class="enableIndex == index ? 'dark' : 'light'">
+                          <div v-show="enableIndex === index" @click="select" class="edit">
+                            <img style="line-height: 110px" class="edit-icon" src="../assets/icon/select.png"/>
+                          </div>
+                      </div>
+
+                      <img 
+                      :src=" remoteUrl + remoteDataDir + item.picturePath" 
+                      :alt="item.pictureDesc"
+                      class="item"
+                      />
+                  </div>
+
+              </div>   
+            </van-popup>
+            
+
           </div>
         </div>
+
 
         <!-- <div class="tag">
           <div class="tag-intro">标签:</div>
@@ -90,18 +121,26 @@
 
 <script>
 import "../assets/less/edit.less";
-import { request } from "../util/request";
+import { request } from "../util/js/request";
 
 export default {
   data() {
     return {
+      curPage: 1,
+      pageSize: 999,
+      curPicture: {},
+      choosePictureName: '',
+      showEditWindow: false,
+      showRemoveWindow: false,
+      enableIndex: -1,
+      pictureList: [],
       classId: "",
       summary: "",
       classFicationList: [],
       chooseClassName: "", //input框内显示的值
       classNameList: [],
-      showPicker: false,
-
+      showClassPicker: false,
+      showCoverPicker: false,
       show: false,
       title: "",
       // 编辑器
@@ -145,6 +184,21 @@ export default {
   },
 
   methods: {
+    select() {
+      this.showCoverPicker = false;
+      this.choosePictureName = this.curPicture.pictureDesc
+    },
+    curSelect(index) {
+      let userToken = localStorage.getItem("token");
+      let userId = localStorage.getItem("userId");
+      if (userToken == null || userId == null) {
+        this.$toast.fail("请登录");
+        this.$router.push({ name: "login", query: { name: "myPicture" } });
+        return;
+      }
+      this.enableIndex = index;
+      this.curPicture = this.pictureList[index];
+    },
     getAllClassfication() {
       request({
         method: "post",
@@ -160,7 +214,7 @@ export default {
         })
     },
     changeConfirm(val, index) {
-      this.showPicker = false;
+      this.showClassPicker = false;
       this.chooseClassName = val; //传值
 
       this.classFicationList.map((o) => {
@@ -174,7 +228,8 @@ export default {
         setTimeout(done, 100);
         // 发起请求 - 保存文章
         let userToken = localStorage.getItem("token");
-        if (userToken == undefined) {
+        let userId = localStorage.getItem("userId");
+      if (userToken == null || userId == null) {
           this.$toast.fail("请登录");
           this.$router.push({name:"login",query:{name:'edit'}});
           return;
@@ -191,6 +246,7 @@ export default {
             content: this.content,
             title: this.title,
             summary: this.summary,
+            articleCoverId: this.curPicture.id
           },
         }).then((res) => {
           console.log(res)
@@ -215,14 +271,28 @@ export default {
     goback() {
       this.$router.push("home");
     },
-
-    // 上传图片方法
-    $imgAdd(pos, $file) {
-      console.log(pos, $file);
+    getPictureList() {
+      request({
+          method: "post",
+          url: "user/picture/getAllPictures",
+          params: {
+            userId: localStorage.getItem("userId"),
+            page: this.curPage,
+            pageSize: this.pageSize
+          },
+        })
+          .then((res) => {
+            if (res.status == 200) {
+              this.pictureList = res.data.rows;
+            } else {
+              this.$toast(res.msg);
+            }
+          })
     },
   },
   created() {
     this.getAllClassfication();
+    this.getPictureList();
   },
 };
 </script>

@@ -30,6 +30,13 @@
         <div class="dividing-line"></div>
 
         <div class="item">
+          <div class="item-name" @click="goMyPict">图片管理</div>
+          <img class="into" src="../assets/icon/into-2.png" @click="goMyPict" />
+        </div>
+
+        <div class="dividing-line"></div>
+
+        <div class="item">
           <div class="item-name" @click="goMyLike">我的收藏</div>
           <img class="into" src="../assets/icon/into-2.png" @click="goMyLike" />
         </div>
@@ -73,7 +80,7 @@
 
 <script>
 import "../assets/less/my.less";
-import { request } from "../util/request";
+import { request } from "../util/js/request";
 export default {
   data() {
     return {
@@ -124,6 +131,9 @@ export default {
     },
     goMyTag() {
       this.$router.push({ name: "tag" });
+    },
+    goMyPict() {
+      this.$router.push({ name: "myPicture" });
     },
     goMyLike() {
       // this.$router.push({ name: "" });

@@ -59,7 +59,7 @@
 
 <script>
 import "../assets/less/classfication.less";
-import { request } from "../util/request";
+import { request } from "../util/js/request";
 export default {
   data() {
     return {

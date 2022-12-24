@@ -94,7 +94,7 @@
 
 <script>
 import "../assets/less/tag.less";
-import { request } from "../util/request";
+import { request } from "../util/js/request";
 export default {
   data() {
     return {
@@ -190,7 +190,8 @@ export default {
       if (action == "confirm") {
         setTimeout(done, 100);
         let userToken = localStorage.getItem("token");
-        if (userToken == null) {
+        let userId = localStorage.getItem("userId");
+        if (userToken == null || userId == null) {
           this.$toast.fail("请登录");
           this.$router.push({ name: "login", query: { name: "tag" } });
           return;
@@ -248,11 +249,12 @@ export default {
       // 网络由正常常到异常时触发
     });
     let userToken = localStorage.getItem("token");
-      if (userToken == null) {
-        this.$toast.fail("请登录");
-        this.$router.push({ name: "login", query: { name: "tag" } });
-        return;
-      }
+    let userId = localStorage.getItem("userId");
+    if (userToken == null || userId == null) {
+      this.$toast.fail("请登录");
+      this.$router.push({ name: "login", query: { name: "tag" } });
+      return;
+    }
     this.getAllTags();
     this.getArticleWithNoneTag();
   },

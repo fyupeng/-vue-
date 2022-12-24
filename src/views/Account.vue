@@ -115,8 +115,8 @@
 import { Dialog } from 'vant';
 
 import "../assets/less/account.less";
-import { validForm } from "../assets/validForm.js";
-import { request } from "../util/request"
+import { validForm } from "../util/js/validForm.js";
+import { request } from "../util/js/request"
 export default {
   data() {
     return {
@@ -135,11 +135,12 @@ export default {
 
     goLogin() {
       let userToken = localStorage.getItem("token");
-        if (userToken == null) {
-          this.$toast.fail("请登录");
-          this.$router.push({name:"login",query:{name:'home'}});
-          return;
-        }
+      let userId = localStorage.getItem("userId");
+      if (userToken == null || userId == null) {
+        this.$toast.fail("请登录");
+        this.$router.push({ name: "login", query: { name: "home" } });
+        return;
+      }
     },
     updatePwd() {
       let o = {

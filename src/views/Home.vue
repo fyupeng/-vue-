@@ -55,7 +55,7 @@
             :key="item.id"
             @click="goDetail(item.id)"
           >
-            <img class="item-img" src="../assets/icon/article.jpg" alt="" />
+            <img class="item-img" :src="item.articleCoverId ? remoteUrl + remoteDataDir + item.articleCoverUrl : require('../assets/icon/article.jpg')" alt="" />
             <div class="other-info">
               <div class="title">{{ item.title.substr(0,35)+(item.title.substr(35,36)==0 ? '' : '…') }}</div>
               <div class="else">
@@ -92,7 +92,7 @@
             :key="item.id"
             @click="goDetail(item.id)"
           >
-            <img class="item-img" src="../assets/icon/article.jpg" alt="" />
+            <img class="item-img" src="../assets/icon/article.jpg" :src="item.articleCoverId ? remoteUrl + remoteDataDir + item.articleCoverUrl : require('../assets/icon/article.jpg')" alt="" />
             <div class="other-info">
               <div class="title">{{ item.title }}</div>
               <div class="else">
@@ -128,7 +128,7 @@
             :key="item.id"
             @click="goDetail(item.id)"
           >
-            <img class="item-img" src="../assets/icon/article.jpg" alt="" />
+            <img class="item-img" :src="item.articleCoverId ? remoteUrl + remoteDataDir + item.articleCoverUrl : require('../assets/icon/article.jpg')" alt="" />
             <div class="other-info">
               <div class="title">{{ item.title }}</div>
               <div class="else">
@@ -164,7 +164,7 @@
 
 <script>
 import "../assets/less/home.less";
-import { request } from "../util/request";
+import { request } from "../util/js/request";
 export default {
   data() {
     return {

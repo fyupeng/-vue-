@@ -122,7 +122,7 @@
 
 <script>
 import "../assets/less/login.less";
-import { validForm } from "../assets/validForm.js";
+import { validForm } from "../util/js/validForm.js";
 
 export default {
   data() {

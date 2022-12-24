@@ -176,7 +176,7 @@
 
 <script>
 import "../assets/less/comment.less";
-import { request } from "../util/request";
+import { request } from "../util/js/request";
 export default {
   data() {
     return {
