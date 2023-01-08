@@ -95,6 +95,7 @@
         <img
           class="item-img"
           src="../assets/icon/article.jpg"
+          :src="item.articleCoverId ? remoteUrl + remoteDataDir + item.articleCoverUrl : require('../assets/icon/article.jpg')"
           alt=""
           @click="goDetail(item.articleId)"
         />

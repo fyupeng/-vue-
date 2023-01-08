@@ -12,7 +12,13 @@ module.exports = defineConfig({
             }
           }
         },
-  }
+  },
+  // 修改标题
+  chainWebpack: (config) => {
+    config.plugin("html").tap((args) => {
+      args[0].title = "rnfblog";
+      return args;
+    });
+  },
 })
-
 

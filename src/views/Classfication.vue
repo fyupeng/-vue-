@@ -25,7 +25,7 @@
           v-for="item in articleList"
           :key="item.id"
         >
-          <img class="item-img" src="../assets/icon/article.jpg" alt="" />
+          <img class="item-img" src="../assets/icon/article.jpg" :src="item.articleCoverId ? remoteUrl + remoteDataDir + item.articleCoverUrl : require('../assets/icon/article.jpg')" alt="" />
           <div class="other-info">
             <div class="title">{{ item.title.substr(0,21)+(item.title.substr(21,22)==0 ? '' : '…') }}</div>
             <div class="else">
